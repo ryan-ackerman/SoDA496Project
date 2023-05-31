@@ -12,5 +12,7 @@ To test for biases, I will create a set of both target words and a set of concep
 
 
 Sources
+
 Caliskan, Aylin, et al. “Semantics Derived Automatically from Language Corpora Contain Human-like Biases.” Papers With Code, 25 Aug. 2016, paperswithcode.com/paper/semantics-derived-automatically-from-language. 
+
 “Bert-Base-Uncased · Hugging Face.” Bert-Base-Uncased · Hugging Face, huggingface.co/bert-base-uncased. Accessed 17 May 2023. 
