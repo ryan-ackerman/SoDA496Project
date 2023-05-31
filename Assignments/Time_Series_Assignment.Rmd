@@ -1,0 +1,40 @@
+---
+title: "Homework 3"
+author: "Ryan Ackerman"
+date: "5/5/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+df <- read.csv('hw3_data.csv')
+```
+
+```{r}
+# Generate a sequence of dates
+start_date <- as.Date("2022-01-01")
+end_date <- as.Date("2022-07-19")
+sequence_dates <- seq(start_date, end_date, length.out = 200)
+
+# Add the sequence of dates to the existing dataset and format dates
+df$Date <- sequence_dates
+df$Date <- format(as.Date(df$Date), "%m/%d/%Y")
+df$Date <- as.Date(df$Date)
+mean(df$y)
+
+```
+
+```{r}
+# Create basics line plot for series 'y' and the date
+ggplot(df, aes(Date, y)) +
+  geom_line() +
+  xlab("Date") +
+  ylab("Value") +
+  ggtitle("Line Plot")
+```
+In this series, we can see that after each time the Y values peaks, there is a steep drop-off/crash that occurs, and after each one the y value rebounds but not nearly to the extent of the previous peak. The mean Y value in this series is equal to around 6.633
+
