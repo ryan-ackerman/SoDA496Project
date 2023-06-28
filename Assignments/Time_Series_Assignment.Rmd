@@ -18,8 +18,12 @@ library(zoo)
 library(forecast)
 library(dynlm)
 
+
 df <- read.csv('hw3_data.csv')
 ```
+
+### To-DO
+### Redo ARMA model, look for solutions for dynlm model (works on other end but not my own --> check packages)
 
 ```{r}
 # Set the start date
@@ -72,9 +76,16 @@ ggplot(data = data.frame(lag = 1:length(pacf_values), pacf = pacf_values), aes(x
   labs(x = "Lag", y = "Partial Autocorrelation", title = "Partial Autocorrelation Function (PACF) Plot")
 ```
 
+
 ```{r}
-arima_model <- auto.arima(ts_data)
-print(arima_model)
+acf(ts_data)
+```
+
+
+
+
+```{r}
+arima_model <- 
 
 plot(arima_model$residuals)
 ```
@@ -86,12 +97,20 @@ Box.test(arima_model$residuals, lag = 20, type = "Ljung-Box")
 ```
 Since there is no clear pattern shown in the residual plot for our ARMA model, as well as our p-value in the Box-Ljung test on the residuals of the model not being significant, we can assume the ARMA model fits our time series
 
-```{r}
-model <- dynlm(Value ~ lag(Value, 1) + lag(Value, 2) + lag(Value, 7) + x, data = ts_df)
 
-summary(model)$r.squared
-summary(model)$adj.r.squared
+```{r}
+model1 <- dynlm::dynlm(Value ~ lag(Value, 1) + lag(Value, 2) + x, data = ts_df)
+
+model2 <- dynlm(Value ~ L(Value, 1) + L(Value, 2) + x, data = ts_df)
+
+
+summary(model2)$r.squared
+
+class(ts_df$Date)
 ```
+
+
+
 
 ```{r}
 plot(model$residuals)
