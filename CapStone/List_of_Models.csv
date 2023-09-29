@@ -1,5 +1,6 @@
 ﻿Model,English,Chinese,Spanish,German,French,Multi,Number_of_Languages,Wikipedia,Bookcorpus,CommonCrawl,CC100,Ted2020,OtherData,MLM,NSP,Sequence_Classification,Token_Classification,QnA,NLI,Other_Uses,Finetuned,XNLI,XQuAD,GLUE,SuperGLUE,MNLI,OtherFT,Encoder,Decoder,Attention_Heads,Layers,Citation,Notes
 bert-base-uncased,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,0
+bert-base-cased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
 bert-base-uncased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
 roberta-base,1,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/abs/1907.11692,0
 xlm-roberta-base,1,1,1,1,1,1,100,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/pdf/1911.02116.pdf,0
