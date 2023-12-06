@@ -1,16 +1,13 @@
-﻿Model,English,Chinese,Spanish,German,French,Multi,Number_of_Languages,Wikipedia,Bookcorpus,CommonCrawl,CC100,Ted2020,OtherData,MLM,NSP,Sequence_Classification,Token_Classification,QnA,NLI,Other_Uses,Finetuned,XNLI,XQuAD,GLUE,SuperGLUE,MNLI,OtherFT,Encoder,Decoder,Attention_Heads,Layers,Citation,Notes
-bert-base-uncased,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,0
-bert-base-cased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
-bert-base-uncased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
-roberta-base,1,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/abs/1907.11692,0
-xlm-roberta-base,1,1,1,1,1,1,100,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/pdf/1911.02116.pdf,0
-ernie-2.0-base-en,1,1,0,0,0,0,2,0,1,0,0,0,1,0,0,0,0,0,0,1,1,0,0,1,1,0,1,1,0,12,12,https://arxiv.org/abs/1907.12412,0
-distilbert-base-cased,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,12,6,https://arxiv.org/abs/1910.01108,0
-distilbert-base-uncased,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,12,6,https://arxiv.org/abs/1910.01108,0
-distilbert-base-multilingual-cased,1,1,1,1,1,1,104,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,12,6,https://arxiv.org/abs/1910.01108,"Cased model, so results might not truly be accurate, this was the only multilingual model of distilbert available"
-stsb-xlm-r-multilingual,1,1,1,1,1,1,100,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,12,4,https://arxiv.org/abs/2004.09813,0
-xlm-e,1,1,1,1,1,1,15,0,0,0,1,0,0,1,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,12,4,"https://paperswithcode.com/paper/xlm-e-cross-lingual-language-model-pre, https://github.com/microsoft/unilm/tree/master/infoxlm",0
-mDeBERTa-v3-base-mnli-xnli,1,1,1,1,1,1,15,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,0,1,1,12,3,"https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-mnli-xnli,  Laurer, Moritz, Wouter van Atteveldt, Andreu Salleras Casas, and Kasper Welbers. 2022. ‘Less Annotating, More Classifying – Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and BERT - NLI’. Preprint, June. Open Science Framework. https://osf.io/74b8k.",0
-multilingual-MiniLMv2-L6-mnli-xnli ,1,1,1,1,1,1,100,0,0,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,0,1,0,1,0,12,6,"Laurer, Moritz, Wouter van Atteveldt, Andreu Salleras Casas, and Kasper Welbers. 2022. ‘Less Annotating, More Classifying – Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and BERT - NLI’. Preprint, June. Open Science Framework. https://osf.io/74b8k.",Distilled from XLM-RoBERTa-Large
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-https://huggingface.co/joeddav/xlm-roberta-large-xnli,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+﻿Done?,Model,English,Chinese,Spanish,German,French,Multi,Number_of_Languages,Wikipedia,Bookcorpus,CommonCrawl,CC100,Ted2020,OtherData,MLM,NSP,Sequence_Classification,Token_Classification,QnA,NLI,Other_Uses,Finetuned,XNLI,XQuAD,GLUE,SuperGLUE,MNLI,OtherFT,Encoder,Decoder,Attention_Heads,Layers,Citation,Notes
+Y,bert-base-cased,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,0
+Y,bert-base-cased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
+Y,bert-base-uncased-multilingual,1,1,1,1,1,1,102,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://dblp.org/rec/journals/corr/abs-1810-04805.html,Trained on 104 languages with the largest Wiki databases
+Y,roberta-base,1,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/abs/1907.11692,0
+Y,xlm-roberta-base,1,1,1,1,1,1,100,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,12,12,https://arxiv.org/pdf/1911.02116.pdf,0
+Y,ernie-2.0-base-en,1,1,0,0,0,0,2,0,1,0,0,0,1,0,0,0,0,0,0,1,1,0,0,1,1,0,1,1,0,12,12,https://arxiv.org/abs/1907.12412,0
+Y,distilbert-base-cased,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,12,6,https://arxiv.org/abs/1910.01108,0
+Y,distilbert-base-multilingual-cased,1,1,1,1,1,1,104,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,12,6,https://arxiv.org/abs/1910.01108,"Cased model, so results might not truly be accurate, this was the only multilingual model of distilbert available"
+Y,stsb-xlm-r-multilingual,1,1,1,1,1,1,100,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,12,4,https://arxiv.org/abs/2004.09813,0
+Removed,xlm-e,1,1,1,1,1,1,15,0,0,0,1,0,0,1,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,12,4,"https://paperswithcode.com/paper/xlm-e-cross-lingual-language-model-pre, https://github.com/microsoft/unilm/tree/master/infoxlm",0
+Removed,mDeBERTa-v3-base-mnli-xnli,1,1,1,1,1,1,15,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,0,1,1,12,3,"https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-mnli-xnli,  Laurer, Moritz, Wouter van Atteveldt, Andreu Salleras Casas, and Kasper Welbers. 2022. ‘Less Annotating, More Classifying – Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and BERT - NLI’. Preprint, June. Open Science Framework. https://osf.io/74b8k.",0
+Removed,multilingual-MiniLMv2-L6-mnli-xnli ,1,1,1,1,1,1,100,0,0,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,0,1,0,1,0,12,6,"Laurer, Moritz, Wouter van Atteveldt, Andreu Salleras Casas, and Kasper Welbers. 2022. ‘Less Annotating, More Classifying – Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and BERT - NLI’. Preprint, June. Open Science Framework. https://osf.io/74b8k.",Distilled from XLM-RoBERTa-Large
