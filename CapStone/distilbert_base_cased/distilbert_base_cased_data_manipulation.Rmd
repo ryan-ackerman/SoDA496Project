@@ -1,0 +1,332 @@
+---
+title: "BERT_base_cased_data_manipulation"
+author: "Ryan Ackerman"
+date: "12/6/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse) 
+ 
+##########
+#        #
+#  Race  #
+#        #
+##########
+
+AFvU <- read.csv("AFvU.csv")
+AFvP <- read.csv("AFvP.csv")
+EUvU <- read.csv("EUvU.csv")
+EUvP <- read.csv("EUvP.csv")
+LXvU <- read.csv("LXvU.csv")
+LXvP <- read.csv("LXvP.csv")
+CHvU <- read.csv("CHvU.csv")
+CHvP <- read.csv("CHvP.csv")
+
+colnames(AFvP)[1] <- "Name"
+colnames(AFvU)[1] <- "Name"
+colnames(EUvP)[1] <- "Name"
+colnames(EUvU)[1] <- "Name"
+colnames(LXvP)[1] <- "Name"
+colnames(LXvU)[1] <- "Name"
+colnames(CHvP)[1] <- "Name"
+colnames(CHvU)[1] <- "Name"
+
+
+AFvP$Race <- "Black"
+AFvU$Race <- "Black"
+EUvP$Race <- "White"
+EUvU$Race <- "White"
+LXvP$Race <- "Latinx"
+LXvU$Race <- "Latinx"
+CHvP$Race <- "Chinese"
+CHvU$Race <- "Chinese"
+
+Pleasant <- rbind(AFvP, EUvP, LXvP, CHvP)
+Unpleasant <- rbind(AFvU, EUvU, LXvU, CHvU)
+
+Pleasant <- Pleasant %>%
+  select(Name, Race, everything())
+Unpleasant <- Unpleasant %>%
+  select(Name, Race, everything())
+
+################
+# Pleasant_new #
+################
+
+# Install and load the required packages
+library(stringdist)
+
+# Create an empty dataframe to store the results
+Pleasant_New <- data.frame(Name = character(), Race = character(), Word = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(Pleasant)) {
+  # Extract Name and Race values
+  name <- Pleasant$Name[i]
+  race <- Pleasant$Race[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(Pleasant)) {  # Assuming the other attributes start from the third column
+    word <- names(Pleasant)[j]
+    
+    # Calculate cosine similarity
+    similarity <- Pleasant[i, j]
+    
+    # Add a new row to the new dataframe
+    Pleasant_New <- rbind(Pleasant_New, data.frame(Name = name, Race = race, Word = word, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(Pleasant_New) <- NULL
+Pleasant_New$CosineSimilarity <- as.numeric(Pleasant_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(Pleasant_New) <- c("Name", "Race", "Word", "CosineSimilarity")
+
+##################
+# Unpleasant_new #
+##################
+
+# Create an empty dataframe to store the results
+Unpleasant_New <- data.frame(Name = character(), Race = character(), Word = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(Unpleasant)) {
+  # Extract Name and Race values
+  name <- Unpleasant$Name[i]
+  race <- Unpleasant$Race[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(Unpleasant)) {  # Assuming the other attributes start from the third column
+    word <- names(Unpleasant)[j]
+    
+    # Calculate cosine similarity
+    similarity <- Unpleasant[i, j]
+    
+    # Add a new row to the new dataframe
+    Unpleasant_New <- rbind(Unpleasant_New, data.frame(Name = name, Race = race, Word = word, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(Unpleasant_New) <- NULL
+Unpleasant_New$CosineSimilarity <- as.numeric(Unpleasant_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(Unpleasant_New) <- c("Name", "Race", "Word", "CosineSimilarity")
+
+# Add good or bad column and rbind() to create final Race dataset
+Pleasant_New$Good_or_Bad <- "Good"
+Unpleasant_New$Good_or_Bad <- "Bad"
+RaceWithinModel <- rbind(Pleasant_New, Unpleasant_New)
+write.csv(RaceWithinModel, "distilbert_base_cased_Race.csv", row.names = FALSE)
+
+
+#####################
+#                   #
+# Gender and Career #
+#                   #
+#####################
+
+MvU <- read.csv("MvU.csv")
+MvP <- read.csv("MvP.csv")
+FvU <- read.csv("FvU.csv")
+FvP <- read.csv("FvP.csv")
+MvS <- read.csv("MvS.csv")
+MvN <- read.csv("MvN.csv")
+FvS <- read.csv("FvS.csv")
+FvN <- read.csv("FvN.csv")
+
+colnames(MvU)[1] <- "Name"
+colnames(MvP)[1] <- "Name"
+colnames(FvU)[1] <- "Name"
+colnames(FvP)[1] <- "Name"
+
+colnames(MvS)[1] <- "Name"
+colnames(MvN)[1] <- "Name"
+colnames(FvS)[1] <- "Name"
+colnames(FvN)[1] <- "Name"
+
+
+MvU$Gender <- "M"
+MvP$Gender <- "M"
+FvU$Gender <- "F"
+FvP$Gender <- "F"
+
+MvS$Gender <- "M"
+MvN$Gender <- "M"
+FvS$Gender <- "F"
+FvN$Gender <- "F"
+
+GenderPleasant <- rbind(MvP, FvP)
+GenderUnpleasant <- rbind(MvU, FvU)
+STEM <- rbind(MvS, FvS)
+NonSTEM <- rbind(MvN, FvN)
+
+
+GenderPleasant <- GenderPleasant %>%
+  select(Name, Gender, everything())
+GenderUnpleasant <- GenderUnpleasant %>%
+  select(Name, Gender, everything())
+STEM <- STEM %>%
+  select(Name, Gender, everything())
+NonSTEM <- NonSTEM %>%
+  select(Name, Gender, everything())
+
+########################
+# GenderUnpleasant_new #
+########################
+
+# Create an empty dataframe to store the results
+GenderUnpleasant_New <- data.frame(Name = character(), Gender = character(), Word = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(GenderUnpleasant)) {
+  # Extract Name and Race values
+  name <- GenderUnpleasant$Name[i]
+  gender <- GenderUnpleasant$Gender[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(GenderUnpleasant)) {  # Assuming the other attributes start from the third column
+    word <- names(GenderUnpleasant)[j]
+    
+    # Calculate cosine similarity
+    similarity <- GenderUnpleasant[i, j]
+    
+    # Add a new row to the new dataframe
+    GenderUnpleasant_New <- rbind(GenderUnpleasant_New, data.frame(Name = name, Gender = gender, Word = word, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(GenderUnpleasant_New) <- NULL
+GenderUnpleasant_New$CosineSimilarity <- as.numeric(GenderUnpleasant_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(GenderUnpleasant_New) <- c("Name", "Gender", "Word", "CosineSimilarity")
+
+GenderUnpleasant_New$Good_or_Bad <- "Bad"
+
+######################
+# GenderPleasant_new #
+######################
+
+# Create an empty dataframe to store the results
+GenderPleasant_New <- data.frame(Name = character(), Gender = character(), Word = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(GenderPleasant)) {
+  # Extract Name and Race values
+  name <- GenderPleasant$Name[i]
+  gender <- GenderPleasant$Gender[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(GenderPleasant)) {  # Assuming the other attributes start from the third column
+    word <- names(GenderPleasant)[j]
+    
+    # Calculate cosine similarity
+    similarity <- GenderPleasant[i, j]
+    
+    # Add a new row to the new dataframe
+    GenderPleasant_New <- rbind(GenderPleasant_New, data.frame(Name = name, Gender = gender, Word = word, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(GenderPleasant_New) <- NULL
+GenderPleasant_New$CosineSimilarity <- as.numeric(GenderPleasant_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(GenderPleasant_New) <- c("Name", "Gender", "Word", "CosineSimilarity")
+
+GenderPleasant_New$Good_or_Bad <- "Good"
+
+##########
+# Gender #
+##########
+GenderWithinModel <- rbind(GenderPleasant_New, GenderUnpleasant_New)
+write.csv(GenderWithinModel, "distilbert_base_cased_Gender.csv", row.names = FALSE)
+
+
+############
+# STEM_New #
+############
+
+# Create an empty dataframe to store the results
+STEM_New <- data.frame(Name = character(), Gender = character(), Career = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(STEM)) {
+  # Extract Name and Race values
+  name <- STEM$Name[i]
+  gender <- STEM$Gender[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(STEM)) {  # Assuming the other attributes start from the third column
+    career <- names(STEM)[j]
+    
+    # Calculate cosine similarity
+    similarity <- STEM[i, j]
+    
+    # Add a new row to the new dataframe
+    STEM_New <- rbind(STEM_New, data.frame(Name = name, Gender = gender, Career = career, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(STEM_New) <- NULL
+STEM_New$CosineSimilarity <- as.numeric(STEM_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(STEM_New) <- c("Name", "Gender", "Career", "CosineSimilarity")
+
+STEM_New$STEM <- "Yes"
+
+###############
+# NonSTEM_New #
+###############
+
+# Create an empty dataframe to store the results
+NonSTEM_New <- data.frame(Name = character(), Gender = character(), Career = character(), CosineSimilarity = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each row in the original dataframe
+for (i in 1:nrow(NonSTEM)) {
+  # Extract Name and Race values
+  name <- NonSTEM$Name[i]
+  gender <- NonSTEM$Gender[i]
+  
+  # Loop through the other 10 attributes
+  for (j in 3:ncol(NonSTEM)) {  # Assuming the other attributes start from the third column
+    career <- names(NonSTEM)[j]
+    
+    # Calculate cosine similarity
+    similarity <- NonSTEM[i, j]
+    
+    # Add a new row to the new dataframe
+    NonSTEM_New <- rbind(NonSTEM_New, data.frame(Name = name, Gender = gender, Career = career, CosineSimilarity = similarity))
+  }
+}
+
+# Reset row names and convert CosineSimilarity to numeric
+rownames(NonSTEM_New) <- NULL
+NonSTEM_New$CosineSimilarity <- as.numeric(NonSTEM_New$CosineSimilarity)
+
+# Rename columns for clarity
+colnames(NonSTEM_New) <- c("Name", "Gender", "Career", "CosineSimilarity")
+
+NonSTEM_New$STEM <- "No"
+
+##########
+# Career #
+##########
+
+STEMWithinModel <- rbind(STEM_New, NonSTEM_New)
+write.csv(STEMWithinModel, "distilbert_base_cased_Career.csv", row.names = FALSE)
+```
+

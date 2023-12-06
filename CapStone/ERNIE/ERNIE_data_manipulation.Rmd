@@ -1,5 +1,17 @@
-library(tidyverse) 
+---
+title: "BERT_base_cased_data_manipulation"
+author: "Ryan Ackerman"
+date: "12/6/2023"
+output: html_document
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse) 
+ 
 ##########
 #        #
 #  Race  #
@@ -113,7 +125,7 @@ colnames(Unpleasant_New) <- c("Name", "Race", "Word", "CosineSimilarity")
 Pleasant_New$Good_or_Bad <- "Good"
 Unpleasant_New$Good_or_Bad <- "Bad"
 RaceWithinModel <- rbind(Pleasant_New, Unpleasant_New)
-write.csv(RaceWithinModel, "BERT_base_cased_Race.csv", row.names = FALSE)
+write.csv(RaceWithinModel, "ERNIE_Race.csv", row.names = FALSE)
 
 
 #####################
@@ -239,7 +251,7 @@ GenderPleasant_New$Good_or_Bad <- "Good"
 # Gender #
 ##########
 GenderWithinModel <- rbind(GenderPleasant_New, GenderUnpleasant_New)
-write.csv(GenderWithinModel, "BERT_base_cased_Gender.csv", row.names = FALSE)
+write.csv(GenderWithinModel, "ERNIE_Gender.csv", row.names = FALSE)
 
 
 ############
@@ -315,15 +327,6 @@ NonSTEM_New$STEM <- "No"
 ##########
 
 STEMWithinModel <- rbind(STEM_New, NonSTEM_New)
-write.csv(STEMWithinModel, "BERT_base_cased_Career.csv", row.names = FALSE)
-
-
-
-
-
-
-
-
-
-
+write.csv(STEMWithinModel, "ERNIE_Career.csv", row.names = FALSE)
+```
 

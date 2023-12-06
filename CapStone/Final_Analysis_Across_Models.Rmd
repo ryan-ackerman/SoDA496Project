@@ -1,0 +1,15 @@
+---
+title: "Final Analysis Across Models"
+author: "Ryan Ackerman"
+date: "12/6/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load all lm outputs and combine into their respective datasets
+```
+
