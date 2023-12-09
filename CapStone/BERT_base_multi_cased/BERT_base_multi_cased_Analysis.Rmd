@@ -17,7 +17,10 @@ library(broom)
 Race <- read.csv("BERT_base_multi_cased_Race.csv")
 Gender <- read.csv("BERT_base_multi_cased_Gender.csv")
 Career <- read.csv("BERT_base_multi_cased_Career.csv")
+Race$Race <- factor(Race$Race, levels = c("White", "Chinese", "Latinx", "Black"))
 
+refRace <- "White"
+Race$Race <- relevel(factor(Race$Race), ref = refRace)
 Race_P <- Race %>%
   filter(Good_or_Bad == "Good")
 Race_U <- Race %>%
@@ -50,8 +53,7 @@ Gender$CosineSimilarity <- min_max_normalized[, 3]
 Career$CosineSimilarity <- min_max_normalized[, 4]
 
 # Reference Factors and Splitting other data sets for analysis
-refRace <- "White"
-Race$Race <- relevel(factor(Race$Race), ref = refRace)
+
 
 refGender <- "M"
 Gender$Gender <- relevel(factor(Gender$Gender), ref = refGender)
@@ -205,5 +207,27 @@ CareerNCoeff <- lm(CosineSimilarity ~ Gender, data = Career_N)
 summary(CareerNCoeff)
 tidy_output <- tidy(CareerNCoeff)
 write.csv(tidy_output, "BERT_base_multi_cased_lm_CareerN.csv", row.names = FALSE)
+```
+
+```{r}
+#############################
+# ANOVA and T-Test Analysis #
+#############################
+
+TukeyHSD_result_list <- list(tukey_NC, tukey_SC, tukey_PG, tukey_UG, tukey_PR, tukey_UR)
+list = list("NC","SC","PG","UG","PR","UR")
+tidy_tukey_df <- data.frame(term = character(0), contrast = character(0), estimate = numeric(0),
+                            null.value = numeric(0), conf.low = numeric(0), conf.high = numeric(0),
+                            adj.p.value = numeric(0), TestName = character(0), Model = character(0))
+
+for (i in seq_along(TukeyHSD_result_list)) {
+  tidy_result <- tidy(TukeyHSD_result_list[[i]])
+  tidy_result$TestName <- list[[i]]
+  tidy_result$Model <- "BERT_base_multi_cased"
+  
+  # Append the tidy_result to tidy_tukey_df
+  tidy_tukey_df <- bind_rows(tidy_tukey_df, tidy_result)
+}
+write.csv(tidy_tukey_df, "tidytukey.csv")
 ```
 

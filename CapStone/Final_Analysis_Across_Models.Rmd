@@ -10,6 +10,517 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-# load all lm outputs and combine into their respective datasets
+# Front Matter
+library(tidyverse)
+
+get_dataframe_name <- function(dataframe) {
+  deparse(substitute(dataframe))
+}
+```
+
+
+```{r}
+########
+# Race #
+########
+BERT_bcRacep <- read.csv("./BERT_base_cased/BERT_base_cased_lm_RaceP.csv")
+BERT_bcRaceu <- read.csv("./BERT_base_cased/BERT_base_cased_lm_RaceU.csv")
+BERT_bmcRacep <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_RaceP.csv")
+BERT_bmcRaceu <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_RaceU.csv")
+BERT_bmuRacep <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_RaceP.csv")
+BERT_bmuRaceu <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_RaceU.csv")
+distilbert_bcRacep <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_RaceP.csv")
+distilbert_bcRaceu <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_RaceU.csv")
+distilbert_bmcRacep <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_RaceP.csv")
+distilbert_bmcRaceu <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_RaceU.csv")
+ERNIE_Racep <- read.csv("./ERNIE/ERNIE_lm_RaceP.csv")
+ERNIE_Raceu <- read.csv("./ERNIE/ERNIE_lm_RaceU.csv")
+RoBERTa_bRacep <- read.csv("./RoBERTa_base/RoBERTa_base_lm_RaceP.csv")
+RoBERTa_bRaceu <- read.csv("./RoBERTa_base/RoBERTa_base_lm_RaceU.csv")
+STSB_Racep <- read.csv("./stsb_xlm_r_multi/stsb_lm_RaceP.csv")
+STSB_Raceu <- read.csv("./stsb_xlm_r_multi/stsb_lm_RaceU.csv")
+XLM_rRacep <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_RaceP.csv")
+XLM_rRaceu <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_RaceU.csv")
+
+BERT_bcRacep$Df <- get_dataframe_name(BERT_bcRacep)
+BERT_bcRaceu$Df <- get_dataframe_name(BERT_bcRaceu)
+BERT_bmcRacep$Df <- get_dataframe_name(BERT_bmcRacep)
+BERT_bmcRaceu$Df <- get_dataframe_name(BERT_bmcRaceu)
+BERT_bmuRacep$Df <- get_dataframe_name(BERT_bmuRacep)
+BERT_bmuRaceu$Df <- get_dataframe_name(BERT_bmuRaceu)
+distilbert_bcRacep$Df <- get_dataframe_name(distilbert_bcRacep) 
+distilbert_bcRaceu$Df <- get_dataframe_name(distilbert_bcRaceu)
+distilbert_bmcRacep$Df <- get_dataframe_name(distilbert_bmcRacep)
+distilbert_bmcRaceu$Df <- get_dataframe_name(distilbert_bmcRaceu)
+ERNIE_Racep$Df <- get_dataframe_name(ERNIE_Racep)
+ERNIE_Raceu$Df <- get_dataframe_name(ERNIE_Raceu)
+RoBERTa_bRacep$Df <- get_dataframe_name(RoBERTa_bRacep)
+RoBERTa_bRaceu$Df <- get_dataframe_name(RoBERTa_bRaceu)
+STSB_Racep$Df <- get_dataframe_name(STSB_Racep)
+STSB_Raceu$Df <- get_dataframe_name(STSB_Raceu)
+XLM_rRacep$Df <- get_dataframe_name(XLM_rRacep)
+XLM_rRaceu$Df <- get_dataframe_name(XLM_rRaceu)
+
+BERT_bcRacep$Multi <- "No"
+BERT_bcRaceu$Multi <- "No"
+BERT_bmcRacep$Multi <- "Yes"
+BERT_bmcRaceu$Multi <- "Yes"
+BERT_bmuRacep$Multi <- "Yes"
+BERT_bmuRaceu$Multi <- "Yes"
+distilbert_bcRacep$Multi <- "No"
+distilbert_bcRaceu$Multi <- "No"
+distilbert_bmcRacep$Multi <- "Yes" 
+distilbert_bmcRaceu$Multi <- "Yes"
+ERNIE_Racep$Multi <- "Yes"
+ERNIE_Raceu$Multi <- "Yes"
+RoBERTa_bRacep$Multi <- "No"
+RoBERTa_bRaceu$Multi <- "No"
+STSB_Racep$Multi <- "Yes"
+STSB_Raceu$Multi <- "Yes"
+XLM_rRacep$Multi <- "Yes"
+XLM_rRaceu$Multi <- "Yes"
+
+df_list <- list(BERT_bcRacep, BERT_bcRaceu, BERT_bmcRacep, 
+                BERT_bmcRaceu, BERT_bmuRacep, BERT_bmuRaceu, 
+                distilbert_bcRacep, distilbert_bcRaceu, 
+                distilbert_bmcRacep, distilbert_bmcRaceu, 
+                ERNIE_Racep, ERNIE_Raceu, RoBERTa_bRacep, 
+                RoBERTa_bRaceu, STSB_Racep, STSB_Raceu, 
+                XLM_rRacep, XLM_rRaceu)
+#################
+# ChineseVsWhite #
+#################
+# Create a new dataframe to store the selected values
+factorCH <- data.frame(estimate = numeric(0), std.error = numeric(0), p.value = numeric(0), Df = character(0), Multi = character(0))
+
+for (df in df_list) {
+  # Extract values based on the condition and bind to the new dataframe
+  selected_values <- filter(df, term == "RaceChinese") %>%
+                      select(estimate, std.error, p.value, Df, Multi)
+  # Bind the resulting rows to the new dataframe
+  factorCH <- bind_rows(factorCH, selected_values)
+}
+
+# Print the resulting dataframe
+print("Resulting DataFrame:")
+print(factorCH)
+
+################
+# BlackVsWhite #
+################
+# Create a new dataframe to store the selected values
+factorAF <- data.frame(estimate = numeric(0), std.error = numeric(0), p.value = numeric(0), Df = character(0), Multi = character(0))
+
+for (df in df_list) {
+  # Extract values based on the condition and bind to the new dataframe
+  selected_values <- filter(df, term == "RaceBlack") %>%
+                      select(estimate, std.error, p.value, Df, Multi)
+  # Bind the resulting rows to the new dataframe
+  factorAF <- bind_rows(factorAF, selected_values)
+}
+
+# Print the resulting dataframe
+print("Resulting DataFrame:")
+print(factorAF)
+
+#################
+# LatinxVsWhite #
+#################
+# Create a new dataframe to store the selected values
+factorLX <- data.frame(estimate = numeric(0), std.error = numeric(0), p.value = numeric(0), Df = character(0), Multi = character(0))
+
+for (df in df_list) {
+  # Extract values based on the condition and bind to the new dataframe
+  selected_values <- filter(df, term == "RaceLatinx") %>%
+                      select(estimate, std.error, p.value, Df, Multi)
+  # Bind the resulting rows to the new dataframe
+  factorLX <- bind_rows(factorLX, selected_values)
+}
+
+# Print the resulting dataframe
+print("Resulting DataFrame:")
+print(factorLX)
+
+ChineseUnpleasant <- factorCH %>%
+  filter(grepl("u$", Df)) %>%
+  mutate(Race = "Chinese")
+ChinesePleasant <- factorCH %>%
+  filter(grepl("p$", Df)) %>%
+  mutate(Race = "Chinese")
+BlackUnpleasant <- factorAF %>%
+  filter(grepl("u$", Df)) %>%
+  mutate(Race = "Black")
+BlackPleasant <- factorAF %>%
+  filter(grepl("p$", Df)) %>%
+  mutate(Race = "Black")
+LatinxUnpleasant <- factorLX %>%
+  filter(grepl("u$", Df)) %>%
+  mutate(Race = "Latinx")
+LatinxPleasant <- factorLX %>%
+  filter(grepl("p$", Df)) %>%
+  mutate(Race = "Latinx")
+```
+
+```{r}
+##########
+# Gender #
+##########
+BERT_bcGenderp <- read.csv("./BERT_base_cased/BERT_base_cased_lm_GenderP.csv")
+BERT_bcGenderu <- read.csv("./BERT_base_cased/BERT_base_cased_lm_GenderU.csv")
+BERT_bmcGenderp <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_GenderP.csv")
+BERT_bmcGenderu <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_GenderU.csv")
+BERT_bmuGenderp <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_GenderP.csv")
+BERT_bmuGenderu <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_GenderU.csv")
+distilbert_bcGenderp <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_GenderP.csv")
+distilbert_bcGenderu <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_GenderU.csv")
+distilbert_bmcGenderp <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_GenderP.csv")
+distilbert_bmcGenderu <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_GenderU.csv")
+ERNIE_Genderp <- read.csv("./ERNIE/ERNIE_lm_GenderP.csv")
+ERNIE_Genderu <- read.csv("./ERNIE/ERNIE_lm_GenderU.csv")
+RoBERTa_bGenderp <- read.csv("./RoBERTa_base/RoBERTa_base_lm_GenderP.csv")
+RoBERTa_bGenderu <- read.csv("./RoBERTa_base/RoBERTa_base_lm_GenderU.csv")
+STSB_Genderp <- read.csv("./stsb_xlm_r_multi/stsb_lm_GenderP.csv")
+STSB_Genderu <- read.csv("./stsb_xlm_r_multi/stsb_lm_GenderU.csv")
+XLM_rGenderp <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_GenderP.csv")
+XLM_rGenderu <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_GenderU.csv")
+
+BERT_bcGenderp$Df <- get_dataframe_name(BERT_bcGenderp)
+BERT_bcGenderu$Df <- get_dataframe_name(BERT_bcGenderu)
+BERT_bmcGenderp$Df <- get_dataframe_name(BERT_bmcGenderp)
+BERT_bmcGenderu$Df <- get_dataframe_name(BERT_bmcGenderu)
+BERT_bmuGenderp$Df <- get_dataframe_name(BERT_bmuGenderp)
+BERT_bmuGenderu$Df <- get_dataframe_name(BERT_bmuGenderu)
+distilbert_bcGenderp$Df <- get_dataframe_name(distilbert_bcGenderp) 
+distilbert_bcGenderu$Df <- get_dataframe_name(distilbert_bcGenderu)
+distilbert_bmcGenderp$Df <- get_dataframe_name(distilbert_bmcGenderp)
+distilbert_bmcGenderu$Df <- get_dataframe_name(distilbert_bmcGenderu)
+ERNIE_Genderp$Df <- get_dataframe_name(ERNIE_Genderp)
+ERNIE_Genderu$Df <- get_dataframe_name(ERNIE_Genderu)
+RoBERTa_bGenderp$Df <- get_dataframe_name(RoBERTa_bGenderp)
+RoBERTa_bGenderu$Df <- get_dataframe_name(RoBERTa_bGenderu)
+STSB_Genderp$Df <- get_dataframe_name(STSB_Genderp)
+STSB_Genderu$Df <- get_dataframe_name(STSB_Genderu)
+XLM_rGenderp$Df <- get_dataframe_name(XLM_rGenderp)
+XLM_rGenderu$Df <- get_dataframe_name(XLM_rGenderu)
+
+BERT_bcGenderp$Multi <- "No"
+BERT_bcGenderu$Multi <- "No"
+BERT_bmcGenderp$Multi <- "Yes"
+BERT_bmcGenderu$Multi <- "Yes"
+BERT_bmuGenderp$Multi <- "Yes"
+BERT_bmuGenderu$Multi <- "Yes"
+distilbert_bcGenderp$Multi <- "No"
+distilbert_bcGenderu$Multi <- "No"
+distilbert_bmcGenderp$Multi <- "Yes" 
+distilbert_bmcGenderu$Multi <- "Yes"
+ERNIE_Genderp$Multi <- "Yes"
+ERNIE_Genderu$Multi <- "Yes"
+RoBERTa_bGenderp$Multi <- "No"
+RoBERTa_bGenderu$Multi <- "No"
+STSB_Genderp$Multi <- "Yes"
+STSB_Genderu$Multi <- "Yes"
+XLM_rGenderp$Multi <- "Yes"
+XLM_rGenderu$Multi <- "Yes"
+
+df_list <- list(BERT_bcGenderp, BERT_bcGenderu, BERT_bmcGenderp, 
+                BERT_bmcGenderu, BERT_bmuGenderp, BERT_bmuGenderu, 
+                distilbert_bcGenderp, distilbert_bcGenderu, 
+                distilbert_bmcGenderp, distilbert_bmcGenderu, 
+                ERNIE_Genderp, ERNIE_Genderu, RoBERTa_bGenderp, 
+                RoBERTa_bGenderu, STSB_Genderp, STSB_Genderu, 
+                XLM_rGenderp, XLM_rGenderu)
+#################
+# MaleVsFemale #
+#################
+# Create a new dataframe to store the selected values
+factorF <- data.frame(estimate = numeric(0), std.error = numeric(0), p.value = numeric(0), Df = character(0), Multi = character(0))
+
+for (df in df_list) {
+  # Extract values based on the condition and bind to the new dataframe
+  selected_values <- filter(df, term == "GenderF") %>%
+                      select(estimate, std.error, p.value, Df, Multi)
+  # Bind the resulting rows to the new dataframe
+  factorF <- bind_rows(factorF, selected_values)
+}
+
+# Print the resulting dataframe
+print("Resulting DataFrame:")
+print(factorF)
+
+
+FemaleUnpleasant <- factorF %>%
+  filter(grepl("u$", Df)) 
+FemalePleasant <- factorF %>%
+  filter(grepl("p$", Df)) 
+
+```
+
+
+```{r}
+##########
+# Career #
+##########
+BERT_bcCareers <- read.csv("./BERT_base_cased/BERT_base_cased_lm_CareerS.csv")
+BERT_bcCareern <- read.csv("./BERT_base_cased/BERT_base_cased_lm_CareerN.csv")
+BERT_bmcCareers <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_CareerS.csv")
+BERT_bmcCareern <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_CareerN.csv")
+BERT_bmuCareers <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_CareerS.csv")
+BERT_bmuCareern <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_CareerN.csv")
+distilbert_bcCareers <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_CareerS.csv")
+distilbert_bcCareern <- read.csv("./distilbert_base_cased/distilbert_base_cased_lm_CareerN.csv")
+distilbert_bmcCareers <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_CareerS.csv")
+distilbert_bmcCareern <- read.csv("./distilbert_base_multi_cased/distilbert_base_multi_cased_lm_CareerN.csv")
+ERNIE_Careers <- read.csv("./ERNIE/ERNIE_lm_CareerS.csv")
+ERNIE_Careern <- read.csv("./ERNIE/ERNIE_lm_CareerN.csv")
+RoBERTa_bCareers <- read.csv("./RoBERTa_base/RoBERTa_base_lm_CareerS.csv")
+RoBERTa_bCareern <- read.csv("./RoBERTa_base/RoBERTa_base_lm_CareerN.csv")
+STSB_Careers <- read.csv("./stsb_xlm_r_multi/stsb_lm_CareerS.csv")
+STSB_Careern <- read.csv("./stsb_xlm_r_multi/stsb_lm_CareerN.csv")
+XLM_rCareers <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_CareerS.csv")
+XLM_rCareern <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_CareerN.csv")
+
+BERT_bcCareers$Df <- get_dataframe_name(BERT_bcCareers)
+BERT_bcCareern$Df <- get_dataframe_name(BERT_bcCareern)
+BERT_bmcCareers$Df <- get_dataframe_name(BERT_bmcCareers)
+BERT_bmcCareern$Df <- get_dataframe_name(BERT_bmcCareern)
+BERT_bmuCareers$Df <- get_dataframe_name(BERT_bmuCareers)
+BERT_bmuCareern$Df <- get_dataframe_name(BERT_bmuCareern)
+distilbert_bcCareers$Df <- get_dataframe_name(distilbert_bcCareers) 
+distilbert_bcCareern$Df <- get_dataframe_name(distilbert_bcCareern)
+distilbert_bmcCareers$Df <- get_dataframe_name(distilbert_bmcCareers)
+distilbert_bmcCareern$Df <- get_dataframe_name(distilbert_bmcCareern)
+ERNIE_Careers$Df <- get_dataframe_name(ERNIE_Careers)
+ERNIE_Careern$Df <- get_dataframe_name(ERNIE_Careern)
+RoBERTa_bCareers$Df <- get_dataframe_name(RoBERTa_bCareers)
+RoBERTa_bCareern$Df <- get_dataframe_name(RoBERTa_bCareern)
+STSB_Careers$Df <- get_dataframe_name(STSB_Careers)
+STSB_Careern$Df <- get_dataframe_name(STSB_Careern)
+XLM_rCareers$Df <- get_dataframe_name(XLM_rCareers)
+XLM_rCareern$Df <- get_dataframe_name(XLM_rCareern)
+
+BERT_bcCareers$Multi <- "No"
+BERT_bcCareern$Multi <- "No"
+BERT_bmcCareers$Multi <- "Yes"
+BERT_bmcCareern$Multi <- "Yes"
+BERT_bmuCareers$Multi <- "Yes"
+BERT_bmuCareern$Multi <- "Yes"
+distilbert_bcCareers$Multi <- "No"
+distilbert_bcCareern$Multi <- "No"
+distilbert_bmcCareers$Multi <- "Yes" 
+distilbert_bmcCareern$Multi <- "Yes"
+ERNIE_Careers$Multi <- "Yes"
+ERNIE_Careern$Multi <- "Yes"
+RoBERTa_bCareers$Multi <- "No"
+RoBERTa_bCareern$Multi <- "No"
+STSB_Careers$Multi <- "Yes"
+STSB_Careern$Multi <- "Yes"
+XLM_rCareers$Multi <- "Yes"
+XLM_rCareern$Multi <- "Yes"
+
+df_list <- list(BERT_bcCareers, BERT_bcCareern, BERT_bmcCareers, 
+                BERT_bmcCareern, BERT_bmuCareers, BERT_bmuCareern, 
+                distilbert_bcCareers, distilbert_bcCareern, 
+                distilbert_bmcCareers, distilbert_bmcCareern, 
+                ERNIE_Careers, ERNIE_Careern, RoBERTa_bCareers, 
+                RoBERTa_bCareern, STSB_Careers, STSB_Careern, 
+                XLM_rCareers, XLM_rCareern)
+################
+# MaleVsFemale #
+################
+# Create a new dataframe to store the selected values
+factorFS <- data.frame(estimate = numeric(0), std.error = numeric(0), p.value = numeric(0), Df = character(0), Multi = character(0))
+
+for (df in df_list) {
+  # Extract values based on the condition and bind to the new dataframe
+  selected_values <- filter(df, term == "GenderF") %>%
+                      select(estimate, std.error, p.value, Df, Multi)
+  # Bind the resulting rows to the new dataframe
+  factorFS <- bind_rows(factorFS, selected_values)
+}
+
+# Print the resulting dataframe
+print("Resulting DataFrame:")
+print(factorFS)
+
+
+STEM <- factorFS %>%
+  filter(grepl("s$", Df)) 
+NonSTEM <- factorFS %>%
+  filter(grepl("n$", Df)) 
+
+```
+
+
+
+
+
+
+
+```{r}
+############################
+# Graphing for Racial Bias #
+############################
+
+Pleasant <- rbind(LatinxPleasant, ChinesePleasant, BlackPleasant)
+Unpleasant <- rbind(LatinxUnpleasant, ChineseUnpleasant, BlackUnpleasant)
+
+p1 <- ggplot(data = Pleasant, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  facet_grid(.~Race) + 
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For White Names and Other Races for Pleasant Words", x = "Model", y = "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p1
+ggsave("Race_Coefficients_for_Pleasant_Words_Plot.jpeg", p1)
+
+p2 <- ggplot(data = Unpleasant, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  facet_grid(.~Race) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For White Names and Other Races for Unpleasant Words", x = "Model", y = "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p2
+ggsave("Race_Coefficients_for_Unpleasant_Words_Plot.jpeg", p2)
+
+
+############################
+# Graphing for Gender Bias #
+############################
+
+p3 <- ggplot(data = FemalePleasant, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For Males and Females for Pleasant Words", x = "Model", y = "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(-0.1, 0.2) +
+  scale_y_continuous(breaks = seq(-0.1, 0.2, 0.05))
+p3
+ggsave("Gender_Coefficients_for_Pleasant_Words_Plot.jpeg", p3)
+
+p4 <- ggplot(data = FemaleUnpleasant, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For Males and Females for Unpleasant Words", x = "Model", y = "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(-0.1, 0.2) +
+  scale_y_continuous(breaks = seq(-0.1, 0.2, 0.05))
+p4
+ggsave("Gender_Coefficients_for_Unpleasant_Words_Plot.jpeg", p4)
+
+############################
+# Graphing for Career Bias #
+############################
+
+p5 <- ggplot(data = STEM, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For Males and Females for STEM Careers", x = "Model", y =  "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(-0.1, 0.2) +
+  scale_y_continuous(breaks = seq(-0.1, 0.2, 0.05))
+p5
+ggsave("Gender_Coefficients_for_STEM_Careers_Plot.jpeg", p5)
+
+p6 <- ggplot(data = NonSTEM, aes(Df, estimate, color = Multi)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2, color = "black") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  labs(title = "Coefficients For Males and Females for Non-STEM Careers", x = "Model", y = "Coefficient") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  ylim(-0.1, 0.2) +
+  scale_y_continuous(breaks = seq(-0.1, 0.2, 0.05))
+p6
+ggsave("Gender_Coefficients_for_NonSTEM_Careers_Plot.jpeg", p6)
+```
+
+```{r}
+###############################
+# Display of TukeyHSD Results #
+###############################
+BERTbcTukey <- read.csv('./BERT_base_cased/tidytukey.csv')
+BERTbmcTukey <- read.csv('./BERT_base_multi_cased/tidytukey.csv')
+BERTbmuTukey <- read.csv('./BERT_base_multi_uncased/tidytukey.csv')
+distilbertbcTukey <- read.csv("./distilbert_base_cased/tidytukey.csv")
+distilbertbmcTukey <- read.csv("./distilbert_base_multi_cased/tidytukey.csv")
+ERNIETukey <- read.csv("./ERNIE/tidytukey.csv")
+RoBERTabcTukey <- read.csv("./RoBERTa_base/tidytukey.csv")
+STSBTukey <- read.csv("./stsb_xlm_r_multi/tidytukey.csv")
+XLMrTukey <- read.csv("./XLM_RoBERTa_base/tidytukey.csv")
+
+Tukey_Results <- rbind(BERTbcTukey, BERTbmcTukey, BERTbmuTukey, distilbertbcTukey, distilbertbmcTukey, ERNIETukey, RoBERTabcTukey, STSBTukey, XLMrTukey)
+
+RacePleasantTukey <- Tukey_Results %>%
+  filter(TestName == "PR")
+RaceUnpleasantTukey <- Tukey_Results %>%
+  filter(TestName == "UR")
+GenderPleasantTukey <- Tukey_Results %>%
+  filter(TestName == "PG")
+GenderUnpleasantTukey <- Tukey_Results %>%
+  filter(TestName == "UG")
+CareerSTEMTukey <- Tukey_Results %>%
+  filter(TestName == "SC")
+CareerNonSTEMTukey <- Tukey_Results %>%
+  filter(TestName == "NC")
+
+p7 <- ggplot(data = RacePleasantTukey, aes(estimate, contrast)) + 
+  geom_point() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2, color = "black")+
+  facet_wrap(.~Model) + 
+  labs(title = "Difference in Mean Cosine Similarity of Pleasant Words: Race1 - Race2", x = "Estimated Change in Means", y = "Contrast") +
+  geom_vline(xintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p7
+ggsave("Difference_In_Means_RaceVsPleasant.jpeg", p7, width = 22, height = 11, units = "cm")
+
+p8 <- ggplot(data = RaceUnpleasantTukey, aes(estimate, contrast)) + 
+  geom_point() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2, color = "black")+
+  facet_wrap(.~Model) + 
+  labs(title = "Difference in Mean Cosine Similarity of Unpleasant Words: Race1 - Race2", x = "Estimated Change in Means", y = "Contrast") +
+  geom_vline(xintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p8
+ggsave("Difference_In_Means_RaceVsUnpleasant.jpeg", p8, width = 22, height = 11, units = "cm")
+
+p9 <- ggplot(data = GenderPleasantTukey, aes(Model, estimate)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "black")+
+  labs(title = "Difference in Mean Cosine Similarity of Pleasant Words: Female - Male", X = "Model", y = "Estimate Change in Mean") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p9
+ggsave("Difference_In_Means_GenderVsPleasant.jpeg", p9, width = 22, height = 11, units = "cm")
+
+p10 <- ggplot(data = GenderUnpleasantTukey, aes(Model, estimate)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "black")+
+  labs(title = "Difference in Mean Cosine Similarity of Unpleasant Words: Female - Male", X = "Model", y = "Estimate Change in Mean") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p10
+ggsave("Difference_In_Means_GenderVsUnpleasant.jpeg", p10, width = 22, height = 11, units = "cm")
+
+p11 <- ggplot(data = CareerSTEMTukey, aes(Model, estimate)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "black")+
+  labs(title = "Difference in Mean Cosine Similarity of STEM Careers: Female - Male", X = "Model", y = "Estimate Change in Mean") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p11
+ggsave("Difference_In_Means_GenderVsSTEM.jpeg", p11, width = 22, height = 11, units = "cm")
+
+p12 <- ggplot(data = CareerNonSTEMTukey, aes(Model, estimate)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "black")+
+  labs(title = "Difference in Mean Cosine Similarity of Non-STEM Careers: Female - Male", X = "Model", y = "Estimate Change in Mean") +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p12
+ggsave("Difference_In_Means_GenderVsNonSTEM.jpeg", p12, width = 22, height = 11, units = "cm")
 ```
 
