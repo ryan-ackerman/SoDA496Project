@@ -233,3 +233,12 @@ for (i in seq_along(TukeyHSD_result_list)) {
 write.csv(tidy_tukey_df, "tidytukey.csv")
 ```
 
+```{r}
+FullCS <- full_join(Gender, Race)
+FullCS <- full_join(FullCS, Career)
+
+hist(FullCS$CosineSimilarity)
+ggplot(FullCS, aes(CosineSimilarity)) + geom_density()
+
+```
+
