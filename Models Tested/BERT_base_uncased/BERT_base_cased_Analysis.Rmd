@@ -14,9 +14,9 @@ library(tidyverse)
 library(MASS)
 library(broom)
 
-Race <- read.csv("BERT_base_cased_Race.csv")
-Gender <- read.csv("BERT_base_cased_Gender.csv")
-Career <- read.csv("BERT_base_cased_Career.csv")
+Race <- read.csv("Dataframes/BERT_base_uncased_Race.csv")
+Gender <- read.csv("Dataframes/BERT_base_uncased_Gender.csv")
+Career <- read.csv("Dataframes/BERT_base_uncased_Career.csv")
 Race$Race <- factor(Race$Race, levels = c("White", "Chinese", "Latinx", "Black"))
 
 refRace <- "White"
@@ -52,7 +52,7 @@ Race_U$CosineSimilarity <- min_max_normalized[, 2]
 Gender$CosineSimilarity <- min_max_normalized[, 3]
 Career$CosineSimilarity <- min_max_normalized[, 4]
 #Sample for Presentation
-write.csv(Gender, "Gender_Normalized.csv")
+write.csv(Gender, "Dataframes/Gender_Normalized.csv")
 
 # Reference Factors and Splitting other data sets for analysis
 
@@ -181,34 +181,34 @@ t_careerN
 RacePCoeff <- lm(CosineSimilarity ~ Race, data = Race_P)
 summary(RacePCoeff)
 tidy_output <- tidy(RacePCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_RaceP.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_RaceP.csv", row.names = FALSE)
 
 RaceUCoeff <- lm(CosineSimilarity ~ Race, data = Race_U)
 summary(RaceUCoeff)
 tidy_output <- tidy(RaceUCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_RaceU.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_RaceU.csv", row.names = FALSE)
 
 #Gender
 GenderPCoeff <- lm(CosineSimilarity ~ Gender, data = Gender_P)
 summary(GenderPCoeff)
 tidy_output <- tidy(GenderPCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_GenderP.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_GenderP.csv", row.names = FALSE)
 
 GenderUCoeff <- lm(CosineSimilarity ~ Gender, data = Gender_U)
 summary(GenderUCoeff)
 tidy_output <- tidy(GenderUCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_GenderU.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_GenderU.csv", row.names = FALSE)
 
 #Career
 CareerSCoeff <- lm(CosineSimilarity ~ Gender, data = Career_S)
 summary(CareerSCoeff)
 tidy_output <- tidy(CareerSCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_CareerS.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_CareerS.csv", row.names = FALSE)
 
 CareerNCoeff <- lm(CosineSimilarity ~ Gender, data = Career_N)
 summary(CareerNCoeff)
 tidy_output <- tidy(CareerNCoeff)
-write.csv(tidy_output, "BERT_base_cased_lm_CareerN.csv", row.names = FALSE)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_CareerN.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -225,12 +225,12 @@ tidy_tukey_df <- data.frame(term = character(0), contrast = character(0), estima
 for (i in seq_along(TukeyHSD_result_list)) {
   tidy_result <- tidy(TukeyHSD_result_list[[i]])
   tidy_result$TestName <- list[[i]]
-  tidy_result$Model <- "BERT_base_cased"
+  tidy_result$Model <- "BERT_base_uncased"
   
   # Append the tidy_result to tidy_tukey_df
   tidy_tukey_df <- bind_rows(tidy_tukey_df, tidy_result)
 }
-write.csv(tidy_tukey_df, "tidytukey.csv")
+write.csv(tidy_tukey_df, "Dataframes/tidytukey.csv")
 ```
 
 ```{r}

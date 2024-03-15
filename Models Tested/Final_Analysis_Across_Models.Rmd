@@ -23,8 +23,8 @@ get_dataframe_name <- function(dataframe) {
 ########
 # Race #
 ########
-BERT_bcRacep <- read.csv("./BERT_base_cased/BERT_base_cased_lm_RaceP.csv")
-BERT_bcRaceu <- read.csv("./BERT_base_cased/BERT_base_cased_lm_RaceU.csv")
+BERT_buRacep <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_RaceP.csv")
+BERT_buRaceu <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_RaceU.csv")
 BERT_bmcRacep <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_RaceP.csv")
 BERT_bmcRaceu <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_RaceU.csv")
 BERT_bmuRacep <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_RaceP.csv")
@@ -42,8 +42,8 @@ STSB_Raceu <- read.csv("./stsb_xlm_r_multi/stsb_lm_RaceU.csv")
 XLM_rRacep <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_RaceP.csv")
 XLM_rRaceu <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_RaceU.csv")
 
-BERT_bcRacep$Df <- get_dataframe_name(BERT_bcRacep)
-BERT_bcRaceu$Df <- get_dataframe_name(BERT_bcRaceu)
+BERT_buRacep$Df <- get_dataframe_name(BERT_buRacep)
+BERT_buRaceu$Df <- get_dataframe_name(BERT_buRaceu)
 BERT_bmcRacep$Df <- get_dataframe_name(BERT_bmcRacep)
 BERT_bmcRaceu$Df <- get_dataframe_name(BERT_bmcRaceu)
 BERT_bmuRacep$Df <- get_dataframe_name(BERT_bmuRacep)
@@ -61,8 +61,8 @@ STSB_Raceu$Df <- get_dataframe_name(STSB_Raceu)
 XLM_rRacep$Df <- get_dataframe_name(XLM_rRacep)
 XLM_rRaceu$Df <- get_dataframe_name(XLM_rRaceu)
 
-BERT_bcRacep$Multi <- "No"
-BERT_bcRaceu$Multi <- "No"
+BERT_buRacep$Multi <- "No"
+BERT_buRaceu$Multi <- "No"
 BERT_bmcRacep$Multi <- "Yes"
 BERT_bmcRaceu$Multi <- "Yes"
 BERT_bmuRacep$Multi <- "Yes"
@@ -80,7 +80,7 @@ STSB_Raceu$Multi <- "Yes"
 XLM_rRacep$Multi <- "Yes"
 XLM_rRaceu$Multi <- "Yes"
 
-df_list <- list(BERT_bcRacep, BERT_bcRaceu, BERT_bmcRacep, 
+df_list <- list(BERT_buRacep, BERT_buRaceu, BERT_bmcRacep, 
                 BERT_bmcRaceu, BERT_bmuRacep, BERT_bmuRaceu, 
                 distilbert_bcRacep, distilbert_bcRaceu, 
                 distilbert_bmcRacep, distilbert_bmcRaceu, 
@@ -165,8 +165,8 @@ LatinxPleasant <- factorLX %>%
 ##########
 # Gender #
 ##########
-BERT_bcGenderp <- read.csv("./BERT_base_cased/BERT_base_cased_lm_GenderP.csv")
-BERT_bcGenderu <- read.csv("./BERT_base_cased/BERT_base_cased_lm_GenderU.csv")
+BERT_buGenderp <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_GenderP.csv")
+BERT_buGenderu <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_GenderU.csv")
 BERT_bmcGenderp <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_GenderP.csv")
 BERT_bmcGenderu <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_GenderU.csv")
 BERT_bmuGenderp <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_GenderP.csv")
@@ -184,8 +184,8 @@ STSB_Genderu <- read.csv("./stsb_xlm_r_multi/stsb_lm_GenderU.csv")
 XLM_rGenderp <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_GenderP.csv")
 XLM_rGenderu <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_GenderU.csv")
 
-BERT_bcGenderp$Df <- get_dataframe_name(BERT_bcGenderp)
-BERT_bcGenderu$Df <- get_dataframe_name(BERT_bcGenderu)
+BERT_buGenderp$Df <- get_dataframe_name(BERT_buGenderp)
+BERT_buGenderu$Df <- get_dataframe_name(BERT_buGenderu)
 BERT_bmcGenderp$Df <- get_dataframe_name(BERT_bmcGenderp)
 BERT_bmcGenderu$Df <- get_dataframe_name(BERT_bmcGenderu)
 BERT_bmuGenderp$Df <- get_dataframe_name(BERT_bmuGenderp)
@@ -203,8 +203,8 @@ STSB_Genderu$Df <- get_dataframe_name(STSB_Genderu)
 XLM_rGenderp$Df <- get_dataframe_name(XLM_rGenderp)
 XLM_rGenderu$Df <- get_dataframe_name(XLM_rGenderu)
 
-BERT_bcGenderp$Multi <- "No"
-BERT_bcGenderu$Multi <- "No"
+BERT_buGenderp$Multi <- "No"
+BERT_buGenderu$Multi <- "No"
 BERT_bmcGenderp$Multi <- "Yes"
 BERT_bmcGenderu$Multi <- "Yes"
 BERT_bmuGenderp$Multi <- "Yes"
@@ -222,7 +222,7 @@ STSB_Genderu$Multi <- "Yes"
 XLM_rGenderp$Multi <- "Yes"
 XLM_rGenderu$Multi <- "Yes"
 
-df_list <- list(BERT_bcGenderp, BERT_bcGenderu, BERT_bmcGenderp, 
+df_list <- list(BERT_buGenderp, BERT_buGenderu, BERT_bmcGenderp, 
                 BERT_bmcGenderu, BERT_bmuGenderp, BERT_bmuGenderu, 
                 distilbert_bcGenderp, distilbert_bcGenderu, 
                 distilbert_bmcGenderp, distilbert_bmcGenderu, 
@@ -260,8 +260,8 @@ FemalePleasant <- factorF %>%
 ##########
 # Career #
 ##########
-BERT_bcCareers <- read.csv("./BERT_base_cased/BERT_base_cased_lm_CareerS.csv")
-BERT_bcCareern <- read.csv("./BERT_base_cased/BERT_base_cased_lm_CareerN.csv")
+BERT_buCareers <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_CareerS.csv")
+BERT_buCareern <- read.csv("./BERT_base_uncased/Dataframes/BERT_base_uncased_lm_CareerN.csv")
 BERT_bmcCareers <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_CareerS.csv")
 BERT_bmcCareern <- read.csv("./BERT_base_multi_cased/BERT_base_multi_cased_lm_CareerN.csv")
 BERT_bmuCareers <- read.csv("./BERT_base_multi_uncased/BERT_base_multi_uncased_lm_CareerS.csv")
@@ -279,8 +279,8 @@ STSB_Careern <- read.csv("./stsb_xlm_r_multi/stsb_lm_CareerN.csv")
 XLM_rCareers <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_CareerS.csv")
 XLM_rCareern <- read.csv("./XLM_RoBERTa_base/xlm_r_base_lm_CareerN.csv")
 
-BERT_bcCareers$Df <- get_dataframe_name(BERT_bcCareers)
-BERT_bcCareern$Df <- get_dataframe_name(BERT_bcCareern)
+BERT_buCareers$Df <- get_dataframe_name(BERT_buCareers)
+BERT_buCareern$Df <- get_dataframe_name(BERT_buCareern)
 BERT_bmcCareers$Df <- get_dataframe_name(BERT_bmcCareers)
 BERT_bmcCareern$Df <- get_dataframe_name(BERT_bmcCareern)
 BERT_bmuCareers$Df <- get_dataframe_name(BERT_bmuCareers)
@@ -298,8 +298,8 @@ STSB_Careern$Df <- get_dataframe_name(STSB_Careern)
 XLM_rCareers$Df <- get_dataframe_name(XLM_rCareers)
 XLM_rCareern$Df <- get_dataframe_name(XLM_rCareern)
 
-BERT_bcCareers$Multi <- "No"
-BERT_bcCareern$Multi <- "No"
+BERT_buCareers$Multi <- "No"
+BERT_buCareern$Multi <- "No"
 BERT_bmcCareers$Multi <- "Yes"
 BERT_bmcCareern$Multi <- "Yes"
 BERT_bmuCareers$Multi <- "Yes"
@@ -317,7 +317,7 @@ STSB_Careern$Multi <- "Yes"
 XLM_rCareers$Multi <- "Yes"
 XLM_rCareern$Multi <- "Yes"
 
-df_list <- list(BERT_bcCareers, BERT_bcCareern, BERT_bmcCareers, 
+df_list <- list(BERT_buCareers, BERT_buCareern, BERT_bmcCareers, 
                 BERT_bmcCareern, BERT_bmuCareers, BERT_bmuCareern, 
                 distilbert_bcCareers, distilbert_bcCareern, 
                 distilbert_bmcCareers, distilbert_bmcCareern, 
@@ -442,7 +442,7 @@ ggsave("Gender_Coefficients_for_NonSTEM_Careers_Plot.jpeg", p6)
 ###############################
 # Display of TukeyHSD Results #
 ###############################
-BERTbcTukey <- read.csv('./BERT_base_cased/tidytukey.csv')
+BERTbuTukey <- read.csv('./BERT_base_uncased/Dataframes/tidytukey.csv')
 BERTbmcTukey <- read.csv('./BERT_base_multi_cased/tidytukey.csv')
 BERTbmuTukey <- read.csv('./BERT_base_multi_uncased/tidytukey.csv')
 distilbertbcTukey <- read.csv("./distilbert_base_cased/tidytukey.csv")
@@ -452,7 +452,7 @@ RoBERTabcTukey <- read.csv("./RoBERTa_base/tidytukey.csv")
 STSBTukey <- read.csv("./stsb_xlm_r_multi/tidytukey.csv")
 XLMrTukey <- read.csv("./XLM_RoBERTa_base/tidytukey.csv")
 
-Tukey_Results <- rbind(BERTbcTukey, BERTbmcTukey, BERTbmuTukey, distilbertbcTukey, distilbertbmcTukey, ERNIETukey, RoBERTabcTukey, STSBTukey, XLMrTukey)
+Tukey_Results <- rbind(BERTbuTukey, BERTbmcTukey, BERTbmuTukey, distilbertbcTukey, distilbertbmcTukey, ERNIETukey, RoBERTabcTukey, STSBTukey, XLMrTukey)
 
 RacePleasantTukey <- Tukey_Results %>%
   filter(TestName == "PR")

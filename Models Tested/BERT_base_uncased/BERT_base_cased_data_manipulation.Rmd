@@ -18,14 +18,14 @@ library(tidyverse)
 #        #
 ##########
 
-AFvU <- read.csv("AFvU.csv")
-AFvP <- read.csv("AFvP.csv")
-EUvU <- read.csv("EUvU.csv")
-EUvP <- read.csv("EUvP.csv")
-LXvU <- read.csv("LXvU.csv")
-LXvP <- read.csv("LXvP.csv")
-CHvU <- read.csv("CHvU.csv")
-CHvP <- read.csv("CHvP.csv")
+AFvU <- read.csv("Dataframes/AFvU.csv")
+AFvP <- read.csv("Dataframes/AFvP.csv")
+EUvU <- read.csv("Dataframes/EUvU.csv")
+EUvP <- read.csv("Dataframes/EUvP.csv")
+LXvU <- read.csv("Dataframes/LXvU.csv")
+LXvP <- read.csv("Dataframes/LXvP.csv")
+CHvU <- read.csv("Dataframes/CHvU.csv")
+CHvP <- read.csv("Dataframes/CHvP.csv")
 
 colnames(AFvP)[1] <- "Name"
 colnames(AFvU)[1] <- "Name"
@@ -125,7 +125,7 @@ colnames(Unpleasant_New) <- c("Name", "Race", "Word", "CosineSimilarity")
 Pleasant_New$Good_or_Bad <- "Good"
 Unpleasant_New$Good_or_Bad <- "Bad"
 RaceWithinModel <- rbind(Pleasant_New, Unpleasant_New)
-write.csv(RaceWithinModel, "BERT_base_cased_Race.csv", row.names = FALSE)
+write.csv(RaceWithinModel, "Dataframes/BERT_base_uncased_Race.csv", row.names = FALSE)
 
 
 #####################
@@ -134,14 +134,14 @@ write.csv(RaceWithinModel, "BERT_base_cased_Race.csv", row.names = FALSE)
 #                   #
 #####################
 
-MvU <- read.csv("MvU.csv")
-MvP <- read.csv("MvP.csv")
-FvU <- read.csv("FvU.csv")
-FvP <- read.csv("FvP.csv")
-MvS <- read.csv("MvS.csv")
-MvN <- read.csv("MvN.csv")
-FvS <- read.csv("FvS.csv")
-FvN <- read.csv("FvN.csv")
+MvU <- read.csv("Dataframes/MvU.csv")
+MvP <- read.csv("Dataframes/MvP.csv")
+FvU <- read.csv("Dataframes/FvU.csv")
+FvP <- read.csv("Dataframes/FvP.csv")
+MvS <- read.csv("Dataframes/MvS.csv")
+MvN <- read.csv("Dataframes/MvN.csv")
+FvS <- read.csv("Dataframes/FvS.csv")
+FvN <- read.csv("Dataframes/FvN.csv")
 
 colnames(MvU)[1] <- "Name"
 colnames(MvP)[1] <- "Name"
@@ -251,7 +251,7 @@ GenderPleasant_New$Good_or_Bad <- "Good"
 # Gender #
 ##########
 GenderWithinModel <- rbind(GenderPleasant_New, GenderUnpleasant_New)
-write.csv(GenderWithinModel, "BERT_base_cased_Gender.csv", row.names = FALSE)
+write.csv(GenderWithinModel, "Dataframes/BERT_base_uncased_Gender.csv", row.names = FALSE)
 
 
 ############
@@ -327,6 +327,6 @@ NonSTEM_New$STEM <- "No"
 ##########
 
 STEMWithinModel <- rbind(STEM_New, NonSTEM_New)
-write.csv(STEMWithinModel, "BERT_base_cased_Career.csv", row.names = FALSE)
+write.csv(STEMWithinModel, "Dataframes/BERT_base_uncased_Career.csv", row.names = FALSE)
 ```
 
