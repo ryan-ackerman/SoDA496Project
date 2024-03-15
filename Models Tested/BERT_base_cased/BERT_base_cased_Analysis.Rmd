@@ -1,0 +1,244 @@
+---
+title: "BERT_base_cased_Analysis"
+author: "Ryan Ackerman"
+date: "12/6/2023"
+output: html_document
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(MASS)
+library(broom)
+
+Race <- read.csv("Dataframes/BERT_base_uncased_Race.csv")
+Gender <- read.csv("Dataframes/BERT_base_uncased_Gender.csv")
+Career <- read.csv("Dataframes/BERT_base_uncased_Career.csv")
+Race$Race <- factor(Race$Race, levels = c("White", "Chinese", "Latinx", "Black"))
+
+refRace <- "White"
+Race$Race <- relevel(factor(Race$Race), ref = refRace)
+Race_P <- Race %>%
+  filter(Good_or_Bad == "Good")
+Race_U <- Race %>%
+  filter(Good_or_Bad == "Bad")
+
+#########################
+# Min-Max Normalization #
+#########################
+
+# Example datasets
+cosine_similarities_1 <- Race_P$CosineSimilarity
+cosine_similarities_2 <- Race_U$CosineSimilarity
+cosine_similarities_3 <- Gender$CosineSimilarity
+cosine_similarities_4 <- Career$CosineSimilarity
+
+# Combine the datasets into a matrix
+cosine_matrix <- cbind(cosine_similarities_1, cosine_similarities_2, cosine_similarities_3, cosine_similarities_4)
+
+# Find the overall minimum and maximum values
+min_value <- min(cosine_matrix)
+max_value <- max(cosine_matrix)
+
+# Apply min-max normalization
+min_max_normalized <- (cosine_matrix - min_value) / (max_value - min_value)
+
+# Replace the original datasets with normalized values
+Race_P$CosineSimilarity <- min_max_normalized[, 1]
+Race_U$CosineSimilarity <- min_max_normalized[, 2]
+Gender$CosineSimilarity <- min_max_normalized[, 3]
+Career$CosineSimilarity <- min_max_normalized[, 4]
+#Sample for Presentation
+write.csv(Gender, "Dataframes/Gender_Normalized.csv")
+
+# Reference Factors and Splitting other data sets for analysis
+
+
+refGender <- "M"
+Gender$Gender <- relevel(factor(Gender$Gender), ref = refGender)
+Career$Gender <- relevel(factor(Career$Gender), ref = refGender)
+
+Gender_P <- Gender %>%
+  filter(Good_or_Bad == "Good")
+Gender_U <- Gender %>%
+  filter(Good_or_Bad == "Bad")
+
+Career_S <- Career %>%
+  filter(STEM == "Yes")
+Career_N <- Career %>%
+  filter(STEM == "No")
+
+########################
+# Analysis of Variance #
+########################
+
+#Race
+RacePANOVA <- aov(CosineSimilarity ~ Race, data = Race_P)
+tukey_PR <- TukeyHSD(RacePANOVA)
+RacePANOVA
+tukey_PR
+
+RaceUANOVA <- aov(CosineSimilarity ~ Race, data = Race_U)
+tukey_UR <- TukeyHSD(RaceUANOVA)
+RaceUANOVA
+tukey_UR
+
+#Gender
+GenderPANOVA <- aov(CosineSimilarity ~ Gender, data = Gender_P)
+tukey_PG <- TukeyHSD(GenderPANOVA)
+GenderPANOVA
+tukey_PG
+
+GenderUANOVA <- aov(CosineSimilarity ~ Gender, data = Gender_U)
+tukey_UG <- TukeyHSD(GenderUANOVA)
+GenderUANOVA
+tukey_UG
+
+#Career
+CareerSANOVA <- aov(CosineSimilarity ~ Gender, data = Career_S)
+tukey_SC <- TukeyHSD(CareerSANOVA)
+CareerSANOVA
+tukey_SC
+
+CareerNANOVA <- aov(CosineSimilarity ~ Gender, data = Career_N)
+tukey_NC <- TukeyHSD(CareerNANOVA)
+CareerNANOVA
+tukey_NC
+
+##########
+# T-Test #
+##########
+
+#Race
+#Pleasant Words
+WhiteP <- Race_P %>%
+  filter(Race == "White")
+OtherP <- Race_P %>%
+  filter(Race != "White")
+t_raceP <- t.test(WhiteP$CosineSimilarity, OtherP$CosineSimilarity)
+t_raceP
+
+#Individual races compared to White with Pleasant Words
+list = list('Black','Latinx','Chinese')
+for (i in list){
+  t_test_P_result <- t.test(WhiteP$CosineSimilarity, subset(OtherP, Race == i)$CosineSimilarity)
+  print(t_test_P_result)
+}
+
+#Unpleasant Words
+WhiteU <- Race_U %>%
+  filter(Race == "White")
+OtherU <- Race_U %>%
+  filter(Race != "White")
+t_raceU <- t.test(WhiteU$CosineSimilarity, OtherU$CosineSimilarity)
+t_raceU
+
+#Individual races compared to White with Pleasant Words
+list = list('Black','Latinx','Chinese')
+for (i in list){
+  t_test_U_result <- t.test(WhiteU$CosineSimilarity, subset(OtherU, Race == i)$CosineSimilarity)
+  print(t_test_U_result)
+}
+
+#Gender
+MaleP <- Gender_P %>%
+  filter(Gender == "M")
+FemaleP <- Gender_P %>%
+  filter(Gender == "F")
+t_genderP <- t.test(MaleP$CosineSimilarity, FemaleP$CosineSimilarity)
+t_genderP
+
+MaleU <- Gender_U %>%
+  filter(Gender == "M")
+FemaleU <- Gender_U %>%
+  filter(Gender == "F")
+t_genderU <- t.test(MaleU$CosineSimilarity, FemaleU$CosineSimilarity)
+t_genderU
+
+#Career
+MaleS <- Career_S %>%
+  filter(Gender == "M")
+FemaleS <- Career_S %>%
+  filter(Gender == "F")
+t_careerS <- t.test(MaleS$CosineSimilarity, FemaleS$CosineSimilarity)
+t_careerS
+
+MaleN <- Career_N %>%
+  filter(Gender == "M")
+FemaleN <- Career_N %>%
+  filter(Gender == "F")
+t_careerN <- t.test(MaleN$CosineSimilarity, FemaleN$CosineSimilarity)
+t_careerN
+
+##############
+# Regression #
+##############
+
+#Race
+RacePCoeff <- lm(CosineSimilarity ~ Race, data = Race_P)
+summary(RacePCoeff)
+tidy_output <- tidy(RacePCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_RaceP.csv", row.names = FALSE)
+
+RaceUCoeff <- lm(CosineSimilarity ~ Race, data = Race_U)
+summary(RaceUCoeff)
+tidy_output <- tidy(RaceUCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_RaceU.csv", row.names = FALSE)
+
+#Gender
+GenderPCoeff <- lm(CosineSimilarity ~ Gender, data = Gender_P)
+summary(GenderPCoeff)
+tidy_output <- tidy(GenderPCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_GenderP.csv", row.names = FALSE)
+
+GenderUCoeff <- lm(CosineSimilarity ~ Gender, data = Gender_U)
+summary(GenderUCoeff)
+tidy_output <- tidy(GenderUCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_GenderU.csv", row.names = FALSE)
+
+#Career
+CareerSCoeff <- lm(CosineSimilarity ~ Gender, data = Career_S)
+summary(CareerSCoeff)
+tidy_output <- tidy(CareerSCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_CareerS.csv", row.names = FALSE)
+
+CareerNCoeff <- lm(CosineSimilarity ~ Gender, data = Career_N)
+summary(CareerNCoeff)
+tidy_output <- tidy(CareerNCoeff)
+write.csv(tidy_output, "Dataframes/BERT_base_uncased_lm_CareerN.csv", row.names = FALSE)
+```
+
+```{r}
+#############################
+# ANOVA and T-Test Analysis #
+#############################
+
+TukeyHSD_result_list <- list(tukey_NC, tukey_SC, tukey_PG, tukey_UG, tukey_PR, tukey_UR)
+list = list("NC","SC","PG","UG","PR","UR")
+tidy_tukey_df <- data.frame(term = character(0), contrast = character(0), estimate = numeric(0),
+                            null.value = numeric(0), conf.low = numeric(0), conf.high = numeric(0),
+                            adj.p.value = numeric(0), TestName = character(0), Model = character(0))
+
+for (i in seq_along(TukeyHSD_result_list)) {
+  tidy_result <- tidy(TukeyHSD_result_list[[i]])
+  tidy_result$TestName <- list[[i]]
+  tidy_result$Model <- "BERT_base_uncased"
+  
+  # Append the tidy_result to tidy_tukey_df
+  tidy_tukey_df <- bind_rows(tidy_tukey_df, tidy_result)
+}
+write.csv(tidy_tukey_df, "Dataframes/tidytukey.csv")
+```
+
+```{r}
+FullCS <- full_join(Gender, Race)
+FullCS <- full_join(FullCS, Career)
+
+hist(FullCS$CosineSimilarity)
+ggplot(FullCS, aes(CosineSimilarity)) + geom_density()
+
+```
+
